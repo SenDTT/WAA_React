@@ -10,6 +10,16 @@ export async function getAllPosts() {
   }
 }
 
+export async function getPostById(id) {
+  try {
+    const response = await axios.get(`http://localhost:8080/api/v1/auth/posts/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    throw error;
+  }
+}
+
 export async function editTitle(id, data) {
   try {
     const response = await axios.put(
