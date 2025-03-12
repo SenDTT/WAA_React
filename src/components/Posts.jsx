@@ -10,7 +10,7 @@ function Posts(props) {
     })
 
     return (
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-row gap-4 justify-center min-w-[600px]">
             {elements}
         </div>
     );
