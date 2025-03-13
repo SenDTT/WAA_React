@@ -33,8 +33,10 @@ function Posts() {
     if (posts.length == 0) return '';
 
     return (
-        <div className="flex flex-row gap-4 justify-center min-w-[600px]">
-            {elements}
+        <div className="flex flex-col gap-4 justify-center">
+            <div className="flex flex-row gap-4 justify-center min-w-[600px]">
+                {elements}
+            </div>
         </div>
     );
 }

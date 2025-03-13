@@ -1,35 +1,39 @@
 import { useEffect, useState } from "react";
-import { usePostContext } from "../context/PostContext";
 import { deletePost, getPostById } from "../utils/api";
+import { useNavigate, useParams } from "react-router";
 
 const PostDetail = () => {
     const [isShowEdit, setIsShowEdit] = useState(false);
     const [changeText, setChangeText] = useState("");
-    const {selectedPostId, setRefreshPosts, setSelectedPostId} = usePostContext();
     const [post, setPost] = useState(null);
-
+    const params = useParams();
+    const nagative = useNavigate();
+    
     useEffect(() => {
+        const postId = params.id;
+        console.log(params);
         const fetchPost = async (id) => {
             const data = await getPostById(id);
             setPost(data);
         }
 
-        if (selectedPostId !== null) fetchPost(selectedPostId);
+        if (postId !== null) {
+            fetchPost(postId);
+            return;
+        }
 
-        if (selectedPostId == null) {
+        if (postId == null) {
             setPost(null);
         }
         setIsShowEdit(false);
 
-    }, [selectedPostId])
+    }, [])
 
     async function onDeletePostHandler() {
         try {
             await deletePost(selectedPostId);
-            setSelectedPostId(null);
 
-            // reload posts
-            setRefreshPosts(true);
+            nagative("/posts");
         } catch (err) {
             console.log(err);
         }
@@ -41,16 +45,15 @@ const PostDetail = () => {
             setChangeText("");
             setIsShowEdit(false);
 
-            // reload posts
-            setRefreshPosts(true);
+            nagative("/posts");
         } catch (err) {
             console.log(err);
         }
     };
 
     return (
-        <>
-            {post && selectedPostId && (
+        <div className="flex flex-col gap-4 justify-center">
+            {post && params.id && (
                 <div className="flex flex-col gap-2 border border-blue-600 p-4 min-w-[600px]">
                     <div className="w-full text-center underline text-xl">{post.title}</div>
                     <div className="w-full text-center">{post.author.name}</div>
@@ -73,7 +76,7 @@ const PostDetail = () => {
                     <button className="border border-blue-600 text-blue-600 p-2 rounded" onClick={onChangeTitleHandler}>Change Text</button>
                 </div>
             )}
-        </>
+        </div>
     )
 }
 
